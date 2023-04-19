@@ -1,0 +1,8 @@
+<RCC>
+    <qresource prefix="/images">
+        <file>cube.png</file>
+    </qresource>
+    <qresource prefix="/levels">
+        <file>level1.json</file>
+    </qresource>
+</RCC>
