@@ -3,15 +3,27 @@
 
 #include <QString>
 #include <QJsonObject>
+#include <QSize>
+#include <QPoint>
+#include "levelitem.h"
 
 class Level
 {
 public:
+    Level();
     Level(const QString& fileName);
+
+    const QSize& getSize() const;
+    const QPoint& getViewport() const;
+    const QPoint& getStart() const;
+    bool contains(const QString& key) const;
+    LevelItem item(const QString& key) const;
 private:
     bool loaded;
-    int width;
-    int height;
+    QSize size;
+    QPoint viewport;
+    QPoint start;
+    QMap<QString, LevelItem> items;
 
     bool read(const QJsonObject& json);
 };

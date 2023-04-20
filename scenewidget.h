@@ -4,6 +4,9 @@
 #include <QWidget>
 #include <level.h>
 
+#define ITEM_WIDTH 32
+#define ITEM_HEIGHT 32
+
 class SceneWidget : public QWidget {
     Q_OBJECT
 public:
@@ -13,6 +16,12 @@ public:
 protected:
     virtual void paintEvent(QPaintEvent *);
 
+private:
+    Level level;
+    int x;
+    int y;
+
+    void paintLevel(QPainter *painter) const;
 };
 
 #endif // SCENEWIDGET_H

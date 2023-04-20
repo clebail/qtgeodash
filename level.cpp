@@ -1,7 +1,12 @@
 #include <QFile>
 #include <QJsonDocument>
+#include <QJsonArray>
 #include <QtDebug>
 #include "level.h"
+
+Level::Level() {
+    loaded = false;
+}
 
 Level::Level(const QString &fileName)
 {
@@ -24,16 +29,69 @@ Level::Level(const QString &fileName)
 
 bool Level::read(const QJsonObject& json) {
     if (json.contains("size") && json["size"].isObject()) {
-        QJsonObject size = json["size"].toObject();
+        QJsonObject jSize = json["size"].toObject();
 
-        if(size.contains("width") && size.contains("height"))
+        if(jSize.contains("width") && jSize.contains("height"))
         {
-            width = size["width"].toInt();
-            height = size["height"].toInt();
+            size.setWidth(jSize["width"].toInt());
+            size.setHeight(jSize["height"].toInt());
 
-            return true;
+            if (json.contains("viewport") && json["viewport"].isObject()) {
+                QJsonObject jViewport = json["viewport"].toObject();
+
+                if(jViewport.contains("x") && jViewport.contains("y"))
+                {
+                    viewport.setX(jViewport["x"].toInt());
+                    viewport.setY(jViewport["y"].toInt());
+
+                    if (json.contains("start") && json["start"].isObject()) {
+                        QJsonObject jStart = json["start"].toObject();
+
+                        if(jStart.contains("x") && jStart.contains("y"))
+                        {
+                            start.setX(jStart["x"].toInt());
+                            start.setY(jStart["y"].toInt());
+
+                            if (json.contains("scene") && json["scene"].isArray()) {
+                                QJsonArray jScene = json["scene"].toArray();
+
+                                for(auto i : jScene) {
+                                    if (i.isObject()) {
+                                        QJsonObject item = i.toObject();
+                                        QString key = QString("%1:%2").arg(item["x"].toInt()).arg(item["y"].toInt());
+
+                                        items.insert(key, LevelItem(item["x"].toInt(), item["y"].toInt(), item["sprite"].toString(), item["rotate"].toInt()));
+                                    }
+                                }
+
+                                return true;
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 
     return false;
+}
+
+const QSize& Level::getSize() const {
+    return size;
+}
+
+const QPoint& Level::getViewport() const {
+    return viewport;
+}
+
+const QPoint& Level::getStart() const {
+    return start;
+}
+
+bool Level::contains(const QString& key) const {
+    return items.contains(key);
+}
+
+LevelItem Level::item(const QString& key) const {
+    return items.value(key);
 }

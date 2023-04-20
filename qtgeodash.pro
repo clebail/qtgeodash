@@ -10,12 +10,14 @@ CONFIG += c++11
 
 SOURCES += \
     level.cpp \
+    levelitem.cpp \
     main.cpp \
     mainwindow.cpp \
     scenewidget.cpp
 
 HEADERS += \
     level.h \
+    levelitem.h \
     mainwindow.h \
     scenewidget.h
 
