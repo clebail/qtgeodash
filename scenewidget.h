@@ -12,6 +12,8 @@ class SceneWidget : public QWidget {
 public:
     explicit SceneWidget(QWidget *parent = nullptr);
     void setLevel(const Level& level);
+    void incX();
+    void reset();
 
 protected:
     virtual void paintEvent(QPaintEvent *);

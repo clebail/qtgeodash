@@ -7,6 +7,15 @@ SceneWidget::SceneWidget(QWidget *parent) : QWidget(parent) {
 
 void SceneWidget::setLevel(const Level& level) {
     this->level = level;
+    reset();
+}
+
+void SceneWidget::incX() {
+    x+=10;
+    repaint();
+}
+
+void SceneWidget::reset() {
     this->x = level.getViewport().x() * ITEM_WIDTH;
     this->y = level.getViewport().y() * ITEM_HEIGHT;
 
@@ -30,8 +39,8 @@ void SceneWidget::paintLevel(QPainter *painter) const {
     int offsetX = x % ITEM_WIDTH;
     int offsetY = y % ITEM_HEIGHT;
 
-    for(xScreen=0, xLevel = xStart;xScreen<width();xScreen+=ITEM_WIDTH, xLevel++) {
-        for(yScreen=height()-ITEM_HEIGHT, yLevel = yStart;yScreen>=0;yScreen-=ITEM_HEIGHT, yLevel--) {
+    for(xScreen=0, xLevel = xStart;xScreen<width();xLevel++) {
+        for(yScreen=height()-ITEM_HEIGHT, yLevel = yStart;yScreen>=0;yLevel--) {
             if(xLevel < level.getSize().width() && yLevel >=0 && yLevel < level.getSize().height()) {
                 QString key = QString("%1:%2").arg(xLevel).arg(yLevel);
 
@@ -39,8 +48,12 @@ void SceneWidget::paintLevel(QPainter *painter) const {
                     LevelItem li = level.item(key);
 
                     painter->drawImage(xScreen, yScreen, QImage(QStringLiteral(":/images/") + li.getSprite()), offsetX, offsetY, 0, 0);
-                }
+                }               
             }
+            yScreen-=ITEM_HEIGHT-offsetY;
+            offsetY=0;
         }
+        xScreen+=ITEM_WIDTH-offsetX;
+        offsetX=0;
     }
 }

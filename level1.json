@@ -7,10 +7,7 @@
         "x": 0,
         "y": 99
     },
-    "start": {
-        "x": 5,
-        "y": 95
-    },
+    "start": 95,
     "scene": [
         { "x": 0, "y": 96, "sprite": "cube", "rotate": 0 },
         { "x": 0, "y": 97, "sprite": "cube", "rotate": 0 },

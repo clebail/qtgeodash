@@ -44,28 +44,22 @@ bool Level::read(const QJsonObject& json) {
                     viewport.setX(jViewport["x"].toInt());
                     viewport.setY(jViewport["y"].toInt());
 
-                    if (json.contains("start") && json["start"].isObject()) {
-                        QJsonObject jStart = json["start"].toObject();
+                    if (json.contains("start")) {
+                        start = json["start"].toInt();
 
-                        if(jStart.contains("x") && jStart.contains("y"))
-                        {
-                            start.setX(jStart["x"].toInt());
-                            start.setY(jStart["y"].toInt());
+                        if (json.contains("scene") && json["scene"].isArray()) {
+                            QJsonArray jScene = json["scene"].toArray();
 
-                            if (json.contains("scene") && json["scene"].isArray()) {
-                                QJsonArray jScene = json["scene"].toArray();
+                            for(auto i : jScene) {
+                                if (i.isObject()) {
+                                    QJsonObject item = i.toObject();
+                                    QString key = QString("%1:%2").arg(item["x"].toInt()).arg(item["y"].toInt());
 
-                                for(auto i : jScene) {
-                                    if (i.isObject()) {
-                                        QJsonObject item = i.toObject();
-                                        QString key = QString("%1:%2").arg(item["x"].toInt()).arg(item["y"].toInt());
-
-                                        items.insert(key, LevelItem(item["x"].toInt(), item["y"].toInt(), item["sprite"].toString(), item["rotate"].toInt()));
-                                    }
+                                    items.insert(key, LevelItem(item["x"].toInt(), item["y"].toInt(), item["sprite"].toString(), item["rotate"].toInt()));
                                 }
-
-                                return true;
                             }
+
+                            return true;
                         }
                     }
                 }
@@ -84,7 +78,7 @@ const QPoint& Level::getViewport() const {
     return viewport;
 }
 
-const QPoint& Level::getStart() const {
+const int& Level::getStart() const {
     return start;
 }
 

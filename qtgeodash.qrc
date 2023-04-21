@@ -1,6 +1,8 @@
 <RCC>
     <qresource prefix="/images">
         <file>cube.png</file>
+        <file>pic.png</file>
+        <file>joueur.png</file>
     </qresource>
     <qresource prefix="/levels">
         <file>level1.json</file>
